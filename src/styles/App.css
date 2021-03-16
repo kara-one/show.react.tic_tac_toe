@@ -1,0 +1,34 @@
+.header {
+  background-color: #282c34;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 50px;
+  color: white;
+}
+
+.header h1 {
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+.header h2 {
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+.wrapper {
+    margin: 0 50px;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+}
+
+.sidebar {
+    width: 20%;
+}
+
+.main {
+    width: 80%;
+}

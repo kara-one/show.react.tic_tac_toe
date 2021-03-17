@@ -1,5 +1,6 @@
 {
   "name": "show.react.tic_tac_toe",
+  "description": "React Tic Tac Toe",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://github.com/ksawl/show.react.tic_tac_toe",

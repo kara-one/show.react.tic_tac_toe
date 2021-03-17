@@ -2,8 +2,8 @@
 *show.react.tic_tac_toe*
 
 - project is refactoring by https://github.com/kelanwu/react-tic-tac-toe
-- Tools: React.js, Redux.js
-- Demo:
+- Tools: React.js, Redux, Heroku
+- Demo: https://show-react-tic-tac-toe.herokuapp.com/
 
 # Getting Started with Create React App
 

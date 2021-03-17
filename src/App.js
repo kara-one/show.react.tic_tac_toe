@@ -1,27 +1,35 @@
 import './styles/App.css';
 
-import React, { useState } from 'react';
+import {
+    addHistoryBoard,
+    changeIsAscending,
+    changeStepNumber,
+    changeXIsNext,
+    historyAdd,
+    setXIsNext,
+} from './redux/actions';
+import { calcStatus, getStatusMessage } from './libs/LibBoards';
 
 import Board from './components/Board';
-import { calcStatus } from './libs/LibBoards';
+import React from 'react';
+import { connect } from 'react-redux';
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            history: [
-                {
-                    squares: Array(9).fill(null),
-                },
-            ],
-            stepNumber: 0,
-            xIsNext: true,
-            isAscending: true,
-        };
-    }
-
-    handleClick(i) {
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+const App = ({
+    changeIsAscending,
+    addHistoryBoard,
+    changeStepNumber,
+    changeXIsNext,
+    historyAdd,
+    setXIsNext,
+    stateHistory,
+    stateStepNumber,
+    stateIsAscending,
+    stateXIsNext,
+    currentBoard,
+    historyBoard,
+}) => {
+    const handleClick = (i) => {
+        const history = stateHistory.slice(0, stateStepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
 
@@ -29,106 +37,109 @@ class App extends React.Component {
             return;
         }
 
-        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        squares[i] = stateXIsNext ? 'X' : 'O';
 
-        this.setState({
-            history: history.concat([
-                {
-                    squares: squares,
-                    // Store the index of the latest moved square
-                    latestMoveSquare: i,
-                },
-            ]),
-            stepNumber: history.length,
-            xIsNext: !this.state.xIsNext,
+        historyAdd({
+            squares: squares,
+            // Store the index of the latest moved square
+            latestMoveSquare: i,
         });
-    }
+        changeStepNumber(history.length);
+        changeXIsNext();
+        addHistoryBoard(i);
+    };
 
-    jumpTo(step) {
-        this.setState({
-            stepNumber: step,
-            xIsNext: step % 2 === 0,
-        });
-    }
+    const jumpTo = (step) => {
+        setXIsNext(step % 2 === 0);
+        changeStepNumber(step);
+    };
 
-    handleSortToggle() {
-        this.setState({
-            isAscending: !this.state.isAscending,
-        });
-    }
+    const handleSortToggle = () => {
+        changeIsAscending();
+    };
 
-    render() {
-        const history = this.state.history;
-        const stepNumber = this.state.stepNumber;
-        const current = history[stepNumber];
-        const winInfo = calcStatus(current.squares);
-        const winner = winInfo.winner;
+    const history = stateHistory;
+    const stepNumber = stateStepNumber;
+    const current = history[stepNumber];
+    const winInfo = calcStatus(current.squares);
+    const winner = winInfo.winner;
 
-        let moves = history.map((step, move) => {
-            const latestMoveSquare = step.latestMoveSquare;
-            const col = 1 + (latestMoveSquare % 3);
-            const row = 1 + Math.floor(latestMoveSquare / 3);
-            const desc = move
-                ? `Go to move #${move} (${col}, ${row})`
-                : 'Go to game start';
-
-            return (
-                <li key={move}>
-                    {/* Bold the currently selected item */}
-                    <button
-                        className={
-                            move === stepNumber ? 'move-list-item-selected' : ''
-                        }
-                        onClick={() => this.jumpTo(move)}
-                    >
-                        {desc}
-                    </button>
-                </li>
-            );
-        });
-
-        let status;
-        if (winner) {
-            status = 'Winner: ' + winner;
-        } else {
-            if (winInfo.isDraw) {
-                status = 'Draw';
-            } else {
-                status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
-            }
-        }
-
-        const isAscending = this.state.isAscending;
-        if (!isAscending) {
-            moves.reverse();
-        }
+    let moves = history.map((step, move) => {
+        const latestMoveSquare = step.latestMoveSquare;
+        const col = 1 + (latestMoveSquare % 3);
+        const row = 1 + Math.floor(latestMoveSquare / 3);
+        const desc = move
+            ? `Go to move #${move} (${col}, ${row})`
+            : 'Go to game start';
 
         return (
-            <section>
-                <header className="header">
-                    <h1>React Tic Tac Toe</h1>
-                </header>
-
-                <div className="wrapper">
-                    <aside className="sidebar">
-                        <button onClick={() => this.handleSortToggle()}>
-                            {isAscending ? 'descending' : 'ascending'}
-                        </button>
-                        <ol>{moves}</ol>
-                    </aside>
-
-                    <section className="main">
-                        <h1>{status}</h1>
-                        <Board
-                            squares={current.squares}
-                            onClick={(i) => this.handleClick(i)}
-                            winLine={winInfo.line}
-                        />
-                    </section>
-                </div>
-            </section>
+            <li key={move}>
+                {/* Bold the currently selected item */}
+                <button
+                    className={
+                        move === stepNumber ? 'move-list-item-selected' : ''
+                    }
+                    onClick={() => jumpTo(move)}
+                >
+                    {desc}
+                </button>
+            </li>
         );
-    }
-}
+    });
 
-export default App;
+    let status = getStatusMessage(currentBoard);
+
+    const isAscending = stateIsAscending;
+    if (!isAscending) {
+        moves.reverse();
+    }
+
+    return (
+        <section>
+            <header className="header">
+                <h1>React Tic Tac Toe</h1>
+            </header>
+
+            <div className="wrapper">
+                <aside className="sidebar">
+                    <button onClick={() => handleSortToggle()}>
+                        {isAscending ? 'descending' : 'ascending'}
+                    </button>
+                    <ol>{moves}</ol>
+                </aside>
+
+                <section className="main">
+                    <h1>{status}</h1>
+                    <Board
+                        squares={current.squares}
+                        onClick={(i) => handleClick(i)}
+                        winLine={winInfo.line}
+                    />
+                </section>
+            </div>
+        </section>
+    );
+};
+
+const mapStateToProps = (state) => {
+    console.log('state: ', state);
+    return {
+        stateHistory: state.boards.history,
+        stateStepNumber: state.boards.stepNumber,
+        stateIsAscending: state.boards.isAscending,
+        stateXIsNext: state.boards.xIsNext,
+        currentBoard: state.boards.currentBoard,
+        historyBoard: state.boards.historyBoard,
+    };
+};
+
+const mapDispatchToProps = {
+    changeIsAscending,
+    addHistoryBoard,
+    changeStepNumber,
+    changeXIsNext,
+    historyAdd,
+    setXIsNext,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

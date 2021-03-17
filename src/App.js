@@ -3,6 +3,7 @@ import './styles/App.css';
 import Board from './components/Boards/Board';
 import History from './components/History/History';
 import React from 'react';
+import Stat from './components/Stat/Stat';
 import { connect } from 'react-redux';
 import { getStatusMessage } from './libs/LibBoards';
 
@@ -17,6 +18,7 @@ const App = ({ currentBoard }) => {
 
             <div className="wrapper">
                 <aside className="sidebar">
+                    <Stat />
                     <History />
                 </aside>
 

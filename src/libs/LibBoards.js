@@ -9,6 +9,13 @@ export function getStartBoard() {
     };
 }
 
+export function getStartScore() {
+    return {
+        x: 0,
+        o: 0,
+    };
+}
+
 export function getWinnerKeys(cells) {
     const lines = [
         [0, 1, 2],

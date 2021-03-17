@@ -1,0 +1,29 @@
+.stat .scores {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    columns: 1fr 1fr;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.stat .scores li {
+    border: 1px solid #000;
+}
+.stat .scores .head {
+    background-color: #000;
+    font-size: 25px;
+    line-height: 40px;
+    color: #fff;
+    text-align: center;
+}
+.stat .scores .value {
+    text-align: center;
+    font-size: 45px;
+    line-height: 70px;
+}
+.stat .buttons-wrapper {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    margin-top: 15px;
+}

@@ -10,7 +10,7 @@ import {
 } from './redux/actions';
 import { calcStatus, getStatusMessage } from './libs/LibBoards';
 
-import Board from './components/Board';
+import Board from './components/Boards/Board';
 import React from 'react';
 import { connect } from 'react-redux';
 

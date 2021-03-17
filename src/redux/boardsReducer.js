@@ -1,5 +1,6 @@
 import {
     ADD_HISTORY_BOARD,
+    GET_HISTORY_STEP,
     HISTORY,
     IS_ASCENDING,
     SET_X_IS_NEXT,
@@ -58,6 +59,7 @@ export const boardsReducer = (state = initState, action) => {
                 ...state,
                 isAscending: !state.isAscending,
             };
+        /** NEW */
         case ADD_HISTORY_BOARD:
             const cellID = parseInt(action.payload);
             const currentBoard = state.currentBoard;
@@ -68,8 +70,8 @@ export const boardsReducer = (state = initState, action) => {
 
             const cells = currentBoard.cells.slice();
             const step = currentBoard.step + 1;
-            const currentPlayer = currentBoard.nextPlayer; 
-            const nextPlayer = currentBoard.currentPlayer; 
+            const currentPlayer = currentBoard.nextPlayer;
+            const nextPlayer = currentBoard.currentPlayer;
 
             cells[cellID] = currentPlayer;
 
@@ -82,15 +84,19 @@ export const boardsReducer = (state = initState, action) => {
                 isDraw: checkIsDraw(cells),
             };
 
-            const sliceHistoryBoard = state.historyBoard.slice(
-                0,
-                step,
-            );
+            const sliceHistoryBoard = state.historyBoard.slice(0, step);
 
             return {
                 ...state,
                 historyBoard: sliceHistoryBoard.concat([newBoard]),
                 currentBoard: newBoard,
+            };
+        case GET_HISTORY_STEP:
+            const stepID = parseInt(action.payload);
+
+            return {
+                ...state,
+                currentBoard: state.historyBoard[stepID],
             };
         default:
             return state;

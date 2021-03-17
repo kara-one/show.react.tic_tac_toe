@@ -11,6 +11,7 @@ import {
 import { calcStatus, getStatusMessage } from './libs/LibBoards';
 
 import Board from './components/Boards/Board';
+import History from './components/History/History';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -49,50 +50,13 @@ const App = ({
         addHistoryBoard(i);
     };
 
-    const jumpTo = (step) => {
-        setXIsNext(step % 2 === 0);
-        changeStepNumber(step);
-    };
-
-    const handleSortToggle = () => {
-        changeIsAscending();
-    };
-
     const history = stateHistory;
     const stepNumber = stateStepNumber;
     const current = history[stepNumber];
     const winInfo = calcStatus(current.squares);
     const winner = winInfo.winner;
 
-    let moves = history.map((step, move) => {
-        const latestMoveSquare = step.latestMoveSquare;
-        const col = 1 + (latestMoveSquare % 3);
-        const row = 1 + Math.floor(latestMoveSquare / 3);
-        const desc = move
-            ? `Go to move #${move} (${col}, ${row})`
-            : 'Go to game start';
-
-        return (
-            <li key={move}>
-                {/* Bold the currently selected item */}
-                <button
-                    className={
-                        move === stepNumber ? 'move-list-item-selected' : ''
-                    }
-                    onClick={() => jumpTo(move)}
-                >
-                    {desc}
-                </button>
-            </li>
-        );
-    });
-
     let status = getStatusMessage(currentBoard);
-
-    const isAscending = stateIsAscending;
-    if (!isAscending) {
-        moves.reverse();
-    }
 
     return (
         <section>
@@ -102,14 +66,12 @@ const App = ({
 
             <div className="wrapper">
                 <aside className="sidebar">
-                    <button onClick={() => handleSortToggle()}>
-                        {isAscending ? 'descending' : 'ascending'}
-                    </button>
-                    <ol>{moves}</ol>
+                    <History />
                 </aside>
 
                 <section className="main">
                     <h1>{status}</h1>
+
                     <Board
                         squares={current.squares}
                         onClick={(i) => handleClick(i)}

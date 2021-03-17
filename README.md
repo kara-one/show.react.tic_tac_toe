@@ -1,3 +1,10 @@
+# React Tic Tac Toe
+*show.react.tic_tac_toe*
+
+- project is refactoring by https://github.com/kelanwu/react-tic-tac-toe
+- Tools: React.js, Redux.js
+- Demo:
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

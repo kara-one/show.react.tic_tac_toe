@@ -30,8 +30,14 @@ const App = ({ currentBoard }) => {
     );
 };
 
-const mapStateToProps = (state) => ({
-    currentBoard: state.boards.currentBoard,
-});
+// const mapStateToProps = (state) => ({
+//     currentBoard: state.boards.currentBoard,
+// });
+const mapStateToProps = (state) => {
+    console.log('state: ', state);
+    return {
+        currentBoard: state.boards.currentBoard,
+    };
+};
 
 export default connect(mapStateToProps, null)(App);

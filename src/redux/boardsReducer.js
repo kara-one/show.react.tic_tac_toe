@@ -4,8 +4,8 @@ import {
 } from './types';
 import {
     checkIsDraw,
-    checkIsWinner,
     getStartBoard,
+    getWinnerKeys,
 } from '../libs/LibBoards';
 
 const initState = {
@@ -20,7 +20,7 @@ export const boardsReducer = (state = initState, action) => {
             const cellID = parseInt(action.payload);
             const currentBoard = state.currentBoard;
 
-            if (currentBoard.isWinner || currentBoard.cells[cellID]) {
+            if (currentBoard.winnerKeys.length > 0 || currentBoard.cells[cellID]) {
                 return state;
             }
 
@@ -36,7 +36,7 @@ export const boardsReducer = (state = initState, action) => {
                 step,
                 currentPlayer,
                 nextPlayer,
-                isWinner: checkIsWinner(cells),
+                winnerKeys: getWinnerKeys(cells),
                 isDraw: checkIsDraw(cells),
             };
 

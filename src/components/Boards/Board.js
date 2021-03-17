@@ -13,7 +13,7 @@ function Board({ addHistoryBoard, currentBoard }) {
                 key={i}
                 value={currentBoard.cells[i]}
                 onClick={() => addHistoryBoard(i)}
-                highlight={false}
+                highlight={currentBoard.winnerKeys.includes(i)}
             />
         );
 

@@ -4,12 +4,12 @@ export function getStartBoard() {
         step: 0,
         currentPlayer: 'O',
         nextPlayer: 'X',
-        isWinner: false,
+        winnerKeys: [],
         isDraw: false,
     };
 }
 
-export function checkIsWinner(cells) {
+export function getWinnerKeys(cells) {
     const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -24,11 +24,11 @@ export function checkIsWinner(cells) {
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
-            return true;
+            return lines[i];
         }
     }
 
-    return false;
+    return [];
 }
 
 export function checkIsDraw(cells) {
@@ -36,7 +36,7 @@ export function checkIsDraw(cells) {
 }
 
 export function getStatusMessage(currentBoard) {
-    if (currentBoard.isWinner) {
+    if (currentBoard.winnerKeys.length > 0) {
         return `Winner: ${currentBoard.currentPlayer}`;
     }
 

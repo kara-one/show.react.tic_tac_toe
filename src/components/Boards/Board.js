@@ -2,29 +2,33 @@ import './Board.css';
 
 import React from 'react';
 import Square from './Square';
+import { addHistoryBoard } from '../../redux/actions';
+import { connect } from 'react-redux';
 
-class Board extends React.Component {
-    renderSquare(i) {
-        const winLine = this.props.winLine;
-        return (
+function Board({ addHistoryBoard, currentBoard }) {
+    let cells = [];
+    for (let i = 0; i < currentBoard.cells.length; i++) {
+        const item = (
             <Square
                 key={i}
-                value={this.props.squares[i]}
-                onClick={() => this.props.onClick(i)}
-                highlight={winLine && winLine.includes(i)}
+                value={currentBoard.cells[i]}
+                onClick={() => addHistoryBoard(i)}
+                highlight={false}
             />
         );
+
+        cells.push(item);
     }
 
-    render() {
-        const boardSize = 9;
-        let squares = [];
-        for (let i = 0; i < boardSize; i++) {
-            squares.push(this.renderSquare(i))
-        }
-
-        return <div className="board">{squares}</div>;
-    }
+    return <div className="board">{cells}</div>;
 }
 
-export default Board;
+const mapStateToProps = (state) => ({
+    currentBoard: state.boards.currentBoard,
+});
+
+const mapDispatchToProps = {
+    addHistoryBoard,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Board);
